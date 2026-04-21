@@ -1,6 +1,0 @@
-services:
-- type: web
-  name: quickcrave
-  env: python
-  buildcommand: ""
-  startcommand: "gunicorn app:app 

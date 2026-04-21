@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Your Cart</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #00ccbc, #0a3d62);
+    color: white;
+}
+
+/* HEADER */
+.header {
+    padding: 20px;
+    text-align: center;
+    font-size: 22px;
+}
+
+/* CONTAINER */
+.container {
+    padding: 15px;
+}
+
+/* CARD */
+.item {
+    background: white;
+    color: black;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* TOTAL */
+.total {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+/* BUTTON */
+.checkout-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    padding: 15px;
+    background: #00ccbc;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    🛒 Your Cart
+</div>
+
+<div class="container">
+
+{% if cart %}
+    {% for item in cart %}
+        <div class="item">
+            <p><b>{{ item.name }}</b></p>
+            <p>£{{ item.price }} x {{ item.qty }}</p>
+        </div>
+    {% endfor %}
+
+    <div class="total">
+        <b>Total: £{{ total }}</b>
+    </div>
+
+{% else %}
+    <p style="text-align:center;">Cart is empty 😢</p>
+{% endif %}
+
+</div>
+
+{% if cart %}
+<a href="/checkout">
+    <button class="checkout-btn">
+        💳 Go to Checkout
+    </button>
+</a>
+{% endif %}
+
+</body>
+</html>

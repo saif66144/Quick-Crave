@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Checkout</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #1db954, #191414);
+    color: white;
+}
+
+/* CONTAINER */
+.container {
+    padding: 20px;
+}
+
+/* CARD PREVIEW */
+.card-preview {
+    width: 100%;
+    height: 180px;
+    border-radius: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #000, #333);
+    margin-bottom: 20px;
+    color: white;
+    position: relative;
+    transition: 0.5s;
+}
+
+/* CARD TEXT */
+.card-number {
+    font-size: 20px;
+    letter-spacing: 2px;
+    margin-top: 40px;
+}
+
+.card-name {
+    margin-top: 20px;
+}
+
+.card-expiry {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* FORM */
+.payment-card {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #1db954;
+    color: white;
+}
+
+/* FLIP EFFECT */
+.flip {
+    transform: rotateY(180deg);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>💳 Payment</h2>
+
+<!-- CARD PREVIEW -->
+<div id="cardPreview" class="card-preview">
+    <div class="card-number" id="previewNumber">**** **** **** ****</div>
+    <div class="card-name" id="previewName">Your Name</div>
+    <div class="card-expiry" id="previewExpiry">MM/YY</div>
+</div>
+
+<!-- FORM -->
+<div class="payment-card">
+
+<form action="/place_order" method="POST" onsubmit="return validatePayment()">
+    
+<input name="name" placeholder="Full Name" required>
+<input name="address" placeholder="Address" required>
+<input name="phone" placeholder="Phone Number" required>
+<input name="delivery_time" placeholder="Delivery Time">
+<input name="instructions" placeholder="Special Instructions">
+<input name="payment_method" value="Card" hidden>
+<input type="text" id="card" placeholder="Card Number" oninput="updateCard()">
+<input type="text" id="name" placeholder="Cardholder Name" oninput="updateCard()">
+<input type="text" id="expiry" placeholder="MM/YY" oninput="updateCard()">
+<input type="text" id="cvv" placeholder="CVV" onfocus="flipCard()" onblur="unflipCard()">
+
+<button>Pay Now</button>
+
+</form>
+
+</div>
+
+</div>
+
+<script>
+function updateCard() {
+    document.getElementById("previewNumber").innerText =
+        document.getElementById("card").value || "**** **** **** ****";
+
+    document.getElementById("previewName").innerText =
+        document.getElementById("name").value || "Your Name";
+
+    document.getElementById("previewExpiry").innerText =
+        document.getElementById("expiry").value || "MM/YY";
+}
+
+function flipCard() {
+    document.getElementById("cardPreview").classList.add("flip");
+}
+
+function unflipCard() {
+    document.getElementById("cardPreview").classList.remove("flip");
+}
+
+function validatePayment() {
+    let card = document.getElementById("card").value;
+
+    if (card.length < 16) {
+        alert("Invalid card number");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>

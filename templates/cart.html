@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-dark {
+    background: black;
+    color: white;
+}
+
+.btn-green {
+    background: #1db954;
+    color: white;
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
+}
+</style>
+
+<body style="font-family: Arial; background:#f5f5f5;">
+
+<h1 style="text-align:center;">🛒 Your Cart</h1>
+
+<div style="max-width:400px; margin:auto;">
+
+{% for item in cart %}
+    <div style="background:white; padding:15px; margin:10px; border-radius:10px;">
+        
+        <p><b>{{ item.name }}</b></p>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+            
+            <a href="/decrease/{{ loop.index0 }}">
+                <button>-</button>
+            </a>
+
+            <span>{{ item.get('qty', 1) }}</span>
+
+            <a href="/increase/{{ loop.index0 }}">
+                <button>+</button>
+            </a>
+
+        </div>
+
+        <p>£{{ item.price }} x {{ item.get('qty', 1) }}</p>
+        <p><b>£{{ item.price * item.get('qty', 1) }}</b></p>
+
+        <a href="/remove_from_cart/{{ loop.index0 }}">❌ Remove</a>
+
+    </div>
+{% endfor %}
+
+</div>
+
+<h2 style="text-align:center;">Total: £{{ total }}</h2>
+
+<!-- 🔥 NAVIGATION BUTTONS -->
+<div style="text-align:center; margin-top:20px;">
+
+    <a href="/">
+        <button style="padding:10px 15px; margin:5px;">🏠 Home</button>
+    </a>
+
+    <a href="/checkout">
+        <button style="padding:10px 15px; margin:5px; background:green; color:white;">
+            Checkout
+        </button>
+    </a>
+
+</div>
+
+<div id="cart-items">
+    {% for item in session.get('cart', []) %}
+        <p>{{ item.name }} x {{ item.get('qty',1) }}</p>
+    {% endfor %}
+</div>
+
+<hr>
+
+<h3 id="cart-total">Total: £{{ total }}</h3>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu</title>
+
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f7f7f7;
+    margin: 0;
+}
+
+/* HEADER */
+h1 {
+    text-align: center;
+    padding: 15px;
+    background: white;
+    margin: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* LAYOUT */
+.wrapper {
+    display: flex;
+}
+
+/* MENU SIDE */
+.menu {
+    width: 65%;
+    padding: 15px;
+}
+
+/* CARD */
+.card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+/* IMAGE */
+.card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+/* CONTENT */
+.card-content {
+    padding: 12px;
+}
+
+.card-content p {
+    margin: 5px 0;
+}
+
+/* BUTTON */
+.btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: black;
+    color: white;
+    cursor: pointer;
+}
+
+/* CART SIDE */
+.cart {
+    width: 35%;
+    background: white;
+    padding: 15px;
+    border-left: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* CART ITEMS */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+/* TOTAL */
+.total {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* CART BUTTON */
+.cart-btn {
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+    padding: 12px;
+    background: #1db954;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>{{ restaurant.name }} 🍽️</h1>
+
+<div class="wrapper">
+
+    <!-- MENU -->
+    <div class="menu">
+        {% for item in restaurant.menu %}
+        <div class="card">
+
+            <img src="{{ item.image }}">
+
+            <div class="card-content">
+                <p><b>{{ item.name }}</b></p>
+                <p>£{{ item.price }}</p>
+
+                <button onclick="addToCart('{{ item.name }}', '{{ item.price }}')" class="btn">
+                    ➕ Add
+                </button>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- CART -->
+    <div class="cart">
+
+        <h2>🛒 Your Cart</h2>
+
+        <div id="cart-items">
+            {% for item in session.get('cart', []) %}
+                <div class="cart-item">
+                    <span>{{ item.name }}</span>
+                    <span>x{{ item.get('qty',1) }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <div id="cart-total" class="total">
+            Total: £{{ total }}
+        </div>
+
+        <a href="/cart" class="cart-btn">
+            Go to Cart
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+function addToCart(name, price) {
+    fetch('/add_to_cart_ajax', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, price: price })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("CART:", data); // 🔥 DEBUG
+        updateCartUI(data.cart);
+    })
+    .catch(err => console.log(err));
+}
+
+function updateCartUI(cart) {
+    let cartDiv = document.getElementById("cart-items");
+    let totalDiv = document.getElementById("cart-total");
+
+    if (!cartDiv || !totalDiv) {
+        console.log("Cart UI not found ❌");
+        return;
+    }
+
+    cartDiv.innerHTML = "";
+    let total = 0;
+
+    cart.forEach(item => {
+        let qty = item.qty || 1;
+        let price = item.price;
+
+        total += price * qty;
+
+        let p = document.createElement("p");
+        p.innerText = item.name + " x " + qty;
+        cartDiv.appendChild(p);
+    });
+
+    totalDiv.innerText = "Total: £" + total;
+}
+</script>
+
+</body>
+</html>

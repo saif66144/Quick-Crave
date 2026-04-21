@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food App</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-dark {
+    background: black;
+    color: white;
+}
+
+.btn-green {
+    background: #1db954;
+    color: white;
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
+}
+</style>
+
+<body style="font-family: Arial; text-align:center;">
+
+    <h1>🍔 Restaurants</h1>
+
+    {% for r in restaurants %}
+        <div style="margin:20px;">
+            <a href="/menu/{{ r }}">
+                <button style="padding:15px 30px; font-size:18px;">
+                    {{ r }}
+                </button>
+            </a>
+        </div>
+    {% endfor %}
+
+</body>
+</html>
